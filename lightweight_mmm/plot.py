@@ -178,6 +178,43 @@ def _calculate_media_contribution(
     media_contribution = media_contribution.sum(axis=-1)
   return media_contribution
 
+def _calculate_media_contribution_by_geo(
+    media_mix_model: lightweight_mmm.LightweightMMM) -> jnp.ndarray:
+  """Computes contribution for each sample, time, channel.
+
+  Serves as a helper function for making predictions for each channel, time
+  and estimate sample. It is meant to be used in creating media baseline
+  contribution dataframe and visualize media attribution over spend proportion
+  plot.
+
+  Args:
+    media_mix_model: Media mix model.
+
+  Returns:
+    Estimation of contribution for each sample, time, channel.
+
+  Raises:
+    NotFittedModelError: if the model is not fitted before computation
+  """
+  if not hasattr(media_mix_model, "trace"):
+    raise lightweight_mmm.NotFittedModelError(
+        "Model needs to be fit first before attempting to plot its fit.")
+
+  if media_mix_model.trace["media_transformed"].ndim > 3:
+    # s for samples, t for time, c for media channels, g for geo
+    einsum_str = "stcg, scg->stcg"
+  elif media_mix_model.trace["media_transformed"].ndim == 3:
+    # s for samples, t for time, c for media channels
+    einsum_str = "stc, sc->stc"
+
+  media_contribution = jnp.einsum(einsum_str,
+                                  media_mix_model.trace["media_transformed"],
+                                  media_mix_model.trace["coef_media"])
+  #if media_mix_model.trace["media_transformed"].ndim > 3:
+    # Aggregate media channel contribution across geos.
+    #media_contribution = media_contribution.sum(axis=-1)
+  return media_contribution
+
 
 def create_attribution_over_spend_fractions(
     media_mix_model: lightweight_mmm.LightweightMMM,
