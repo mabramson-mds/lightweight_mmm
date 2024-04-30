@@ -252,7 +252,7 @@ def create_media_baseline_contribution_df(
     media_mix_model: lightweight_mmm.LightweightMMM,
     target_scaler: Optional[preprocessing.CustomScaler] = None,
     channel_names: Optional[Sequence[str]] = None) -> pd.DataFrame:
-  """Creates a dataframe for weekly media channels & basline contribution.
+  """Creates a dataframe for weekly media channels & basline contribution plus more granularity.
 
   The output dataframe will be used to create a stacked area plot to visualize
   the contribution of each media channels & baseline.
