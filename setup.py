@@ -70,7 +70,7 @@ setup(
     packages=find_packages(),
     install_requires=_INSTALL_REQUIREMENTS,
     tests_require=_TEST_REQUIREMENTS,
-    url="https://github.com/google/lightweight_mmm",
+    url="https://github.com/mabramson-mds/lightweight_mmm",
     classifiers=[
         "Development Status :: 3 - Alpha",
         "Intended Audience :: Developers",
