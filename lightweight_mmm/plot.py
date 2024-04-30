@@ -362,7 +362,7 @@ def create_media_baseline_contribution_df(
 
   period = np.arange(1, contribution_df.shape[0] + 1)
   contribution_df.loc[:, "period"] = period
-  return contribution_df
+  return ([contribution_df,adjusted_sum_scaled_prediction_across_samples])
 
 
 def plot_response_curves(# jax-ndarray
